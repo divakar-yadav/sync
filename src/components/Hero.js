@@ -49,7 +49,7 @@ export default function Hero() {
           spacing={2}
           alignItems="center"
           useFlexGap
-          sx={{ width: { xs: '100%', sm: '70%' } }}
+          sx={{ width: { xs: '100%', sm: '70%', mt : 20 } }}
         >
           <Typography
             variant="h1"
@@ -60,22 +60,34 @@ export default function Hero() {
               fontSize: 'clamp(3rem, 10vw, 3.5rem)',
             }}
           >
-            Currently&nbsp;Ongoing&nbsp;
-            <Typography
-              component="span"
-              variant="h1"
-              sx={{
-                fontSize: 'inherit',
-                color: (theme) =>
-                  theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
-              }}
-            >
-               Projects
-            </Typography>
+           Train, Deploy and Monitor Your federated Models.
           </Typography>
 
 
         </Stack>
+
+        <Stack
+          spacing={2}
+          alignItems="center"
+          useFlexGap
+          sx={{ width: { xs: '100%', sm: '70%' }, mt : 10 }}
+        >
+          <Typography
+            variant="h1"
+            sx={{
+              fontSize: 'inherit',
+              color: (theme) =>
+                theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
+                fontSize: '2.5rem',
+            }}
+          >
+            Currently Ongoing Projects
+
+          </Typography>
+
+
+        </Stack>
+
         <Container
           container
           sx={{
