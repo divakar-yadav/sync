@@ -22,6 +22,12 @@ import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
 import {PieChart, BarChart} from '@mui/x-charts'
+import Tooltip from '@mui/material/Tooltip';
+import Avatar from '@mui/material/Avatar';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import { useNavigate } from 'react-router-dom';
+
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -47,6 +53,7 @@ const AppBar = styled(MuiAppBar, {
   }),
   ...(open && {
     marginLeft: drawerWidth,
+    zIndex: theme.zIndex.modal + 1,
     width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -102,6 +109,30 @@ export default function Dashboard() {
     setOpen(!open);
   };
 
+  const navigate = useNavigate();
+  // const pages = ['Products', 'Pricing', 'Blog'];
+  const settings = [{'label' : 'Profile', 'href' : '/profile'}, {'label' : 'Account', 'href' : '/account'}, {'label' : 'Dashboard', 'href' : 'dashboard'}, {'label' : 'Logout', 'href' : '/'}];
+  
+    // const [anchorElNav, setAnchorElNav] = React.useState(null);
+    const [anchorElUser, setAnchorElUser] = React.useState(null);
+  
+    // const handleOpenNavMenu = (event) => {
+    //   setAnchorElNav(event.currentTarget);
+    // };
+    const handleOpenUserMenu = (event) => {
+      setAnchorElUser(event.currentTarget);
+    };
+  
+    // const handleCloseNavMenu = () => {
+    //   setAnchorElNav(null);
+    // };
+  
+    const handleCloseUserMenu = (url) => {
+      setAnchorElUser(null);
+      navigate(url);
+    };
+
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: 'flex' }}>
@@ -109,7 +140,7 @@ export default function Dashboard() {
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
-              pr: '24px', // keep right padding when drawer closed
+              // pr: '24px', // keep right padding when drawer closed
             }}
           >
             <IconButton
@@ -118,26 +149,64 @@ export default function Dashboard() {
               aria-label="open drawer"
               onClick={toggleDrawer}
               sx={{
-                marginRight: '36px',
+                // marginRight: '36px',
                 ...(open && { display: 'none' }),
               }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
+
+            <Box  sx={{ display: 'flex', flexDirection: 'row', flexGrow: 1, justifyContent: 'flex-end' }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-evenly'}}>
+            <IconButton 
+            color="inherit"
+            sx={{ marginRight: 'auto' }}
             >
-              Dashboard
-            </Typography>
-            <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+            <Typography
+              component="h1"
+              variant="h6"
+              color="inherit"
+              fontSize={15}
+              noWrap
+              sx = {{ m : 'auto',mr : 2, ml : 2}}
+            >
+              Divakar Yadav
+            </Typography>
+            <Box sx={{ flexGrow: 1 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Divakar Sharp" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={()=>handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting.label}  href = {setting.href} onClick={()=>handleCloseUserMenu(setting.href)}>
+                  <Typography textAlign="center" href = {setting.href}>{setting.label}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+            </Box>
+            </Box>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -160,6 +229,7 @@ export default function Dashboard() {
             {secondaryListItems}
           </List>
         </Drawer>
+
         <Box
           component="main"
           sx={{

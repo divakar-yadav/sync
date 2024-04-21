@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -14,31 +14,173 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CallMergeIcon from '@mui/icons-material/CallMerge';
 import Paper from '@mui/material/Paper';
+import { Container } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Alert from '@mui/material/Alert';
+import { CircularProgress } from '@mui/material';
+import NumberInput from '../numberInput/numberInput'
 
-// interface ExpandMoreProps extends IconButtonProps {
-//   expand: boolean;
-// }
 
-// const ExpandMore = styled((props) => {
-//   const { expand, ...other } = props;
-//   return <IconButton {...other} />;
-// })(({ theme, expand }) => ({
-//   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-//   marginLeft: 'auto',
-//   transition: theme.transitions.create('transform', {
-//     duration: theme.transitions.duration.shortest,
-//   }),
-// }));
+
+
 
 export default function RecipeReviewCard({title, content, img}) {
-    console.log(img,"----img---")
+  
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  const [open, setOpen] = React.useState(false);
+  const [creationSuccesful, isCreationSuccesful] = React.useState(false);
+  const [loading, setLoading] = useState(false);
 
+  const handleClickOpen = () => {
+    setOpen(true);
+    isCreationSuccesful(false)
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    isCreationSuccesful(true)
+  };
+  const handleLoader = () => {
+    setLoading(true)
+    setTimeout(() => {
+      setLoading(false);
+      isCreationSuccesful(true)
+      setTimeout(() => {
+        isCreationSuccesful(false)
+        setTimeout(() => {
+          handleClose()
+        })
+      },3000)
+      // Hide the loader after 2 seconds
+    }, 5000);
+  };
+
+
+  const minimumHours = [
+    {
+      value: 10,
+      label: '10 hours',
+    },
+    {
+      value: 20,
+      label: '20 hours',
+    },
+    {
+      value: 30,
+      label: '30 hours',
+    }
+  ];
+
+  const deviceType = [
+    {
+      value: 'Mobile',
+      label: 'Mobile',
+    },
+    {
+      value: 'Laptop',
+      label: 'Laptop',
+    },
+    {
+      value: 'Tablet',
+      label: 'Tablet',
+    }
+  ];
+  const countries  = [
+    {"label": "Afghanistan", "value": "AF"}, 
+    {"label": "land Islands", "value": "AX"}, 
+    {"label": "Albania", "value": "AL"}, 
+    {"label": "Algeria", "value": "DZ"}, 
+    {"label": "American Samoa", "value": "AS"}, 
+    {"label": "AndorrA", "value": "AD"}, 
+    {"label": "Angola", "value": "AO"}, 
+    {"label": "Anguilla", "value": "AI"}, 
+    {"label": "Antarctica", "value": "AQ"}, 
+    {"label": "Antigua and Barbuda", "value": "AG"}, 
+    {"label": "Argentina", "value": "AR"}, 
+    {"label": "Armenia", "value": "AM"}, 
+    {"label": "Aruba", "value": "AW"}, 
+    {"label": "Australia", "value": "AU"}, 
+    {"label": "Austria", "value": "AT"}, 
+    {"label": "Azerbaijan", "value": "AZ"}, 
+    {"label": "Bahamas", "value": "BS"}, 
+    {"label": "Bahrain", "value": "BH"}, 
+    {"label": "Bangladesh", "value": "BD"}, 
+    {"label": "Barbados", "value": "BB"}, 
+    {"label": "Belarus", "value": "BY"}, 
+    {"label": "Belgium", "value": "BE"}, 
+    {"label": "Belize", "value": "BZ"}, 
+    {"label": "Benin", "value": "BJ"}, 
+    {"label": "Bermuda", "value": "BM"}, 
+    {"label": "Bhutan", "value": "BT"}, 
+    {"label": "Bolivia", "value": "BO"}, 
+    {"label": "Bosnia and Herzegovina", "value": "BA"}, 
+    {"label": "Botswana", "value": "BW"}, 
+    {"label": "Bouvet Island", "value": "BV"}, 
+    {"label": "Brazil", "value": "BR"}, 
+    {"label": "British Indian Ocean Territory", "value": "IO"}, 
+    {"label": "Brunei Darussalam", "value": "BN"}, 
+    {"label": "Bulgaria", "value": "BG"}, 
+    {"label": "Burkina Faso", "value": "BF"}, 
+    {"label": "Burundi", "value": "BI"}, 
+    {"label": "Cambodia", "value": "KH"}, 
+    {"label": "Cameroon", "value": "CM"}, 
+    {"label": "Canada", "value": "CA"}, 
+    {"label": "Cape Verde", "value": "CV"}, 
+    {"label": "Cayman Islands", "value": "KY"}, 
+    {"label": "Central African Republic", "value": "CF"}, 
+    {"label": "Chad", "value": "TD"}, 
+    {"label": "Chile", "value": "CL"}, 
+    {"label": "China", "value": "CN"}, 
+    {"label": "Christmas Island", "value": "CX"}, 
+    {"label": "Cocos (Keeling) Islands", "value": "CC"}, 
+    {"label": "Colombia", "value": "CO"}, 
+    {"label": "Comoros", "value": "KM"}, 
+    {"label": "Congo", "value": "CG"}, 
+    {"label": "Congo, The Democratic Republic of the", "value": "CD"}, 
+    {"label": "Cook Islands", "value": "CK"}, 
+    {"label": "Costa Rica", "value": "CR"}, 
+    {"label": "Cote D Ivoire", "value": "CI"}, 
+    {"label": "Croatia", "value": "HR"}, 
+    {"label": "Cuba", "value": "CU"}, 
+    {"label": "Cyprus", "value": "CY"}, 
+    {"label": "Czech Republic", "value": "CZ"}, 
+    {"label": "Denmark", "value": "DK"}, 
+    {"label": "Djibouti", "value": "DJ"}, 
+    {"label": "Dominica", "value": "DM"}, 
+    {"label": "Dominican Republic", "value": "DO"}
+  ]
+  const currencies = [
+    {
+      value: 'USD',
+      label: '$',
+    },
+    {
+      value: 'EUR',
+      label: '€',
+    },
+    {
+      value: 'BTC',
+      label: '฿',
+    },
+    {
+      value: 'JPY',
+      label: '¥',
+    },
+  ];
   return (
     <Paper elevation={3}>
 
@@ -68,51 +210,152 @@ export default function RecipeReviewCard({title, content, img}) {
          {content}
         </Typography>
       </CardContent>
-      <CardActions disableSpacing>
+      <CardActions disableSpacing style={{ justifyContent: 'space-between' }}>
+      <div>
         <IconButton aria-label="add to favorites">
           <FavoriteIcon />
         </IconButton>
         <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
-        {/* <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
+        </div>
+
+
+{open ?     <React.Fragment>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Create a Contribution Request to a Model"}
+        </DialogTitle>
+      <Box
+      component="form"
+      sx={{
+        '& .MuiTextField-root': { m: 1, width: '25ch' },
+        p : 1
+      }}
+      Validate
+      autoComplete="off"
+    > 
+      <div>
+        <TextField
+          id="outlined-select-currency"
+          select
+          label="Select Device Type"
+          defaultValue="EUR"
+          helperText=""
+          variant="standard"
         >
-          <ExpandMoreIcon />
-        </ExpandMore> */}
+          {deviceType.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          id="outlined-select-currency-native"
+          select
+          label="Please select your Country"
+          defaultValue="EUR"
+          helperText=""
+          variant="standard"
+        >
+          {countries.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+          ))}
+        </TextField>
+      </div>
+      <div>
+        <TextField
+          id="filled-select-currency"
+          select
+          label="You are an Organization or Individual ?"
+          defaultValue="EUR"
+          helperText=""
+          variant="standard"
+        >
+          {['Organization','Individual'].map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          id="minimum-hours-available-in-month"
+          select
+          label="Minimum hours available in a month"
+          defaultValue="EUR"
+          helperText=" "
+          variant="standard"
+        >
+          {minimumHours.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
+      <div>
+        <TextField
+          id="standard-select-currency"
+          select
+          label="Available to contribute every day ?"
+          defaultValue="EUR"
+          helperText=""
+          variant="standard"
+        >
+          {['Yes','No'].map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        <TextField
+          id="standard-select-currency-native"
+          select
+          label="Willing to Take reward ?"
+          defaultValue="EUR"
+          helperText=""
+          variant="standard"
+        >
+          {['Yes','No'].map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
+      </div>
+    </Box>
+    { creationSuccesful ?     <Alert severity="success">your contribution request created.</Alert> 
+ : null}
+        <DialogActions
+        sx={{mr : 1.5}}
+        >
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button
+          variant='contained'
+          onClick={
+            ()=>{
+                handleLoader()
+            }}
+        autoFocus>
+            
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Create'}
+
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment> : null}
+        <Button style={{ borderRadius: '6px' }} variant="contained" endIcon={<CallMergeIcon />}  onClick={handleClickOpen}>
+        Contribute
+</Button>
       </CardActions>
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
-          <Typography paragraph>Method:</Typography>
-          <Typography paragraph>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and set
-            aside for 10 minutes.
-          </Typography>
-          <Typography paragraph>
-            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet over
-            medium-high heat. Add chicken, shrimp and chorizo, and cook, stirring
-            occasionally until lightly browned, 6 to 8 minutes. Transfer shrimp to a
-            large plate and set aside, leaving chicken and chorizo in the pan. Add
-            pimentón, bay leaves, garlic, tomatoes, onion, salt and pepper, and cook,
-            stirring often until thickened and fragrant, about 10 minutes. Add
-            saffron broth and remaining 4 1/2 cups chicken broth; bring to a boil.
-          </Typography>
-          <Typography paragraph>
-            Add rice and stir very gently to distribute. Top with artichokes and
-            peppers, and cook without stirring, until most of the liquid is absorbed,
-            15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and
-            mussels, tucking them down into the rice, and cook again without
-            stirring, until mussels have opened and rice is just tender, 5 to 7
-            minutes more. (Discard any mussels that don&apos;t open.)
-          </Typography>
-          <Typography>
-            Set aside off of the heat to let rest for 10 minutes, and then serve.
-          </Typography>
-        </CardContent>
-      </Collapse>
     </Card>
     </Paper>
   );
